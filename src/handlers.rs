@@ -10,7 +10,7 @@ use pnet::datalink::NetworkInterface;
 use pnet::packet::arp::ArpPacket;
 use pnet::packet::ethernet::{EtherTypes, EthernetPacket};
 use pnet::packet::Packet;
-use pnet::packet::ipv4::Ipv4Packet;
+use pnet::packet::{ipv4::Ipv4Packet, ipv6::Ipv6Packet};
 
 use std::net::IpAddr;
 
@@ -37,6 +37,27 @@ pub fn ethernet_frame_handler(interface: &NetworkInterface, ethernet: EthernetPa
                 );
             } else {
                 println!("[{:<}] IPv4 packet:\tMalformed packet", if_name);
+            }
+        }
+
+        EtherTypes::Ipv6 => {
+            let packet: Option<Ipv6Packet> = Ipv6Packet::new(ethernet.payload());
+
+            if let Some(packet) = packet {
+                let src = &packet.get_source();
+                let dst = &packet.get_destination();
+                let next_proto = &packet.get_next_header();
+                let payload = &packet.payload();
+
+                network_layer_handler(
+                    if_name,
+                    IpAddr::V6(*src),
+                    IpAddr::V6(*dst),
+                    *next_proto,
+                    *payload,
+                );
+            } else {
+                println!("[{:<}] IPv6 packet:\tMalformed packet", if_name);
             }
         }
 

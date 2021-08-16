@@ -1,10 +1,13 @@
 mod icmp;
 use icmp::icmp_handler;
 
+mod icmpv6;
+use icmpv6::icmpv6_handler;
+
 use super::transport::transport_layer_handler;
 
-use pnet::packet::icmp::IcmpPacket;
 use pnet::packet::ip::{IpNextHeaderProtocol, IpNextHeaderProtocols};
+use pnet::packet::{icmp::IcmpPacket, icmpv6::Icmpv6Packet};
 
 use std::net::IpAddr;
 
@@ -23,6 +26,16 @@ pub fn network_layer_handler(
                 icmp_handler(if_name, src, dst, packet, payload);
             } else {
                 println!("[{:<}] ICMP Packet:\tMalformed packet", if_name);
+            }
+        }
+
+        IpNextHeaderProtocols::Icmpv6 => {
+            let packet: Option<Icmpv6Packet> = Icmpv6Packet::new(payload);
+
+            if let Some(packet) = packet {
+                icmpv6_handler(if_name, src, dst, packet);
+            } else {
+                println!("[{:<}] ICMPv6 Packet:\tMalformed packet", if_name);
             }
         }
 
