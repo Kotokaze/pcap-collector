@@ -1,5 +1,6 @@
 use pnet::packet::arp::{ArpOperation, ArpPacket};
 
+/// Arp packet handler
 pub fn arp_handler(if_name: &str, arp_packet: ArpPacket) {
     println!(
         "[{:<}] ARP packet: {:>}({:<}) -> {:>}({:<}); operation: {:^}",

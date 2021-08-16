@@ -1,10 +1,10 @@
-mod arp;
+pub mod arp;
 use arp::arp_handler;
 
-mod network;
+pub mod network;
 use network::network_layer_handler;
 
-mod transport;
+pub mod transport;
 
 use pnet::datalink::NetworkInterface;
 use pnet::packet::arp::ArpPacket;

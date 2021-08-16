@@ -2,6 +2,7 @@ use pnet::packet::icmp::{echo_reply::EchoReplyPacket, echo_request::EchoRequestP
 use pnet::packet::icmp::{IcmpPacket, IcmpTypes};
 use std::net::IpAddr;
 
+/// ICMP packet handler
 pub fn icmp_handler(if_name: &str, src: IpAddr, dst: IpAddr, packet: IcmpPacket, payload: &[u8]) {
     match packet.get_icmp_type() {
         IcmpTypes::EchoRequest => {

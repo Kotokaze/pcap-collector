@@ -11,6 +11,7 @@ use pnet::packet::{icmp::IcmpPacket, icmpv6::Icmpv6Packet};
 
 use std::net::IpAddr;
 
+/// Network layer protocol handler
 pub fn network_layer_handler(
     if_name: &str,
     src: IpAddr,
